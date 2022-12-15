@@ -1,10 +1,10 @@
-
 #include "server.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include  <ctype.h>
 #include <string.h>
+
 
 
 uint8_t LAST_SEQ_NUMBER =0;
@@ -22,7 +22,10 @@ EN_transStat_t recieveTransactionData(ST_transaction* transData){
 	//since the array is not sorted the algorthim must check all its elements for the required account id
 	//and this algorithm is not optimal
 	ST_accountsDB_t *loc_account_ref=NULL;
-	EN_serverError_t server_state =isValidAccount(&(transData->cardHolderData), loc_account_ref);
+	EN_serverError_t server_state =isValidAccount(&(transData->cardHolderData), &loc_account_ref);
+
+	printf("----------------------\n server data is:\n holder name:%s \n exp date:%s \npan number is:%s ",transData->cardHolderData.cardHolderName,transData->cardHolderData.cardExpirationDate,transData->cardHolderData.primaryAccountNumber);
+	printf("address of the global accounts array is:%p",loc_account_ref);
 	if(server_state==SERVER_OK){
 		if(isBlockedAccount(loc_account_ref)==BLOCKED_ACCOUNT){
 			transData->transState=DECLINED_STOLEN_CARD;
@@ -50,45 +53,35 @@ EN_transStat_t recieveTransactionData(ST_transaction* transData){
 
 
 
-/*
-	 if(found==1){
-		if(accounts[var].balance>=transData->terminalData.transAmount){
-			accounts[var].balance=accounts[var].balance-transData->terminalData.transAmount;
-			transData->transState=APPROVED;
-			return APPROVED;;
-		}
-		else{
-			transData->transState=DECLINED_INSUFFECIENT_FUND;
-			return DECLINED_INSUFFECIENT_FUND;
-		}
-	}
-	else{
-			transData->transState=DECLINED_STOLEN_CARD;
-			return DECLINED_STOLEN_CARD;
-		}*/
 
 }
 
-EN_serverError_t isValidAccount(ST_cardData_t* cardData,ST_accountsDB_t* accountRefrence)
+EN_serverError_t isValidAccount(ST_cardData_t* cardData,ST_accountsDB_t** accountRefrence)
 {
 	//since the array is not sorted the algorthim must check all its elements for the required account id
 		//and this algorithm is not optimal
 		uint8_t found=0;
 		uint8_t var=0;
-		while (var!=254){
+		int res2=1;
+		while (var!=255){
 			//if the next account id=0 then the rest of array is empty thus break the loop
+			res2=strcmp((char*)cardData->primaryAccountNumber,(char*)accounts[var].primaryAccountNumber);
 			if(accounts[var].primaryAccountNumber==0){
 				break;
 			}
 			//compare accounts id
-		    else if(strcmp((char*)cardData->primaryAccountNumber,(char*)accounts[var].primaryAccountNumber)==0 ){
+		    else if(res2==0 ){
 				found =1;
 		    	break;
 			}
 			var++;
 		}
 		if(found==1){
-			accountRefrence=&accounts[var];
+			printf("address of the global accounts array is:%p",accounts);
+
+			*accountRefrence=accounts+(var*sizeof(ST_accountsDB_t));
+			int a;
+
 			return SERVER_OK;
 		}
 		else{
@@ -97,7 +90,7 @@ EN_serverError_t isValidAccount(ST_cardData_t* cardData,ST_accountsDB_t* account
 }
 
 EN_serverError_t isBlockedAccount(ST_accountsDB_t *accountRefrence){
-	 if (accountRefrence->state==RUNNING){
+	if (accountRefrence->state==RUNNING){
 		return SERVER_OK;
 	}
 	 else {

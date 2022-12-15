@@ -7,9 +7,13 @@
 
 EN_terminalError_t getTransactionDate(ST_terminalData_t *termData) {
 	uint8_t temp_date[11];
+
+
 	printf("Enter the Transaction Date in format DD/MM/YYYY \n");
-	//scanf("%11[^\n]%*c",temp_date);
-	scanf("%10s", temp_date);
+	fflush(stdout);
+	scanf("%[^\n]",temp_date);
+	fflush(stdin);
+	//scanf("%10s", temp_date);
 
 	printf(" Date entered is:%s \n", temp_date);
 
@@ -76,6 +80,8 @@ EN_terminalError_t getTransactionAmount(ST_terminalData_t *termData) {
 	char tempchar;
 	float temp_amount = 0;
 	printf("Enter the Transaction amount \n");
+	fflush(stdin);
+	fflush(stdout);
 	scanf("%f%c", &temp_amount, &tempchar);
 	if (temp_amount <= 0 || tempchar != '\n') {
 		return INVALID_AMOUNT;
@@ -99,6 +105,8 @@ EN_terminalError_t setMaxAmount(ST_terminalData_t *termData) {
 	char tempchar;
 	float temp_mxamount = 0;
 	printf("enter the Max Transaction amount \n");
+	fflush(stdin);
+	fflush(stdout);
 	scanf("%f%c", &temp_mxamount, &tempchar);
 	if (temp_mxamount <= 0 || tempchar != '\n') {
 			return INVALID_AMOUNT;
