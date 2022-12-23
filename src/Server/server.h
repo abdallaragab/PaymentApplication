@@ -29,9 +29,9 @@ typedef enum EN_serverError_t{
 }EN_serverError_t;
 
 typedef struct ST_accountsDB_t{
+	uint8_t primaryAccountNumber[21];
 	float balance;
 	EN_accountstate_t state;
-	uint8_t primaryAccountNumber[21];
 }ST_accountsDB_t;
 
 EN_transStat_t recieveTransactionData(ST_transaction* transData);

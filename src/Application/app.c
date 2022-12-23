@@ -8,7 +8,6 @@ extern ST_accountsDB_t accounts[255];
 //ST_transaction transactions[255]={{{{0}}}};
 
 int main() {
-	int a=0;
 	ST_cardData_t *newcardPtr;
 	newcardPtr = (ST_cardData_t*) malloc(sizeof(ST_cardData_t));
 	//*newcardPtr=(const ST_cardData_t){0};
@@ -97,6 +96,7 @@ int main() {
 		printf("not valid amount\n ");
 	}
 */
+
   //printf("data of transaction %s",transactions_arr[0].cardHolderData.cardHolderName);
 	//printf("data of database %s ",accounts[100].primaryAccountNumber);
 	//-----------------------------------------------------------------------------------------------------

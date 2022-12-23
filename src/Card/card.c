@@ -16,7 +16,7 @@ EN_cardError_t getCardHolderName(ST_cardData_t* cardData) {
 
 	//scanf("%26[^\n]%*c",temp_name);
 	//	scanf("%[^\n]",temp_name);
-	fgets(temp_name,29,stdin);
+	fgets((char*)temp_name,29,stdin);
 	fflush(stdin);
 
 
