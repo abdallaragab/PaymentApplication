@@ -41,7 +41,7 @@ EN_cardError_t getCardHolderName(ST_cardData_t* cardData) {
 
 	EN_cardError_t getCardExpiryDate(ST_cardData_t * cardData){
 		char temp_Expiry[7];
-
+		char* last_month="12/99";
 		fflush(stdout);
 		printf("Enter the card Expiry Date in format MM/YY \n");
 		fflush(stdout);
@@ -68,6 +68,10 @@ EN_cardError_t getCardHolderName(ST_cardData_t* cardData) {
 				if (!(isdigit(temp_Expiry[var])))
 					flag = 0;
 			}
+		}
+		//check if the months is less than 12
+		if(strcmp(temp_Expiry,last_month)>0){
+			flag=0;
 		}
 		if (flag == 0) {
 			return WRONG_EXP_DATE;

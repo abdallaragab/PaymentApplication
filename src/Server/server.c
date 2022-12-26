@@ -24,8 +24,7 @@ EN_transStat_t recieveTransactionData(ST_transaction* transData){
 	ST_accountsDB_t *loc_account_ref=NULL;
 	EN_serverError_t server_state =isValidAccount(&(transData->cardHolderData), &loc_account_ref);
 
-	printf("----------------------\n server data is:\n holder name:%s \n exp date:%s \npan number is:%s \n",transData->cardHolderData.cardHolderName,transData->cardHolderData.cardExpirationDate,transData->cardHolderData.primaryAccountNumber);
-	printf("address of the  account is:%p and balance is: %d \n",loc_account_ref,loc_account_ref->balance);
+
 	if(server_state==SERVER_OK){
 		if(isBlockedAccount(loc_account_ref)==BLOCKED_ACCOUNT){
 			transData->transState=DECLINED_STOLEN_CARD;
@@ -81,8 +80,6 @@ EN_serverError_t isValidAccount(ST_cardData_t* cardData,ST_accountsDB_t** accoun
 
 			//*accountRefrence=(ST_accountsDB_t*) (accounts+(var*sizeof(ST_accountsDB_t)));
 			*accountRefrence=(ST_accountsDB_t*) (accounts+var);
-			char breakpoint=0;;
-			printf("address of the local account_ref   is:%p",*accountRefrence);
 			return SERVER_OK;
 		}
 		else{
@@ -102,11 +99,10 @@ EN_serverError_t isBlockedAccount(ST_accountsDB_t *accountRefrence){
 
 EN_serverError_t isAmountAvailable(ST_terminalData_t* termData,ST_accountsDB_t* accountRefrence){
 	if(accountRefrence->balance>=termData->transAmount){
-		int breakpoint=0;
 		return SERVER_OK;
 	}
 	else{
-		int breakpoint2=0;
+
 		return LOW_BALANCE;
 	}
 }

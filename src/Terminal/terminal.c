@@ -7,11 +7,11 @@
 
 EN_terminalError_t getTransactionDate(ST_terminalData_t *termData) {
 	uint8_t temp_date[11];
-
+	char *last_day = "31/12/9999";
 
 	printf("Enter the Transaction Date in format DD/MM/YYYY \n");
 	fflush(stdout);
-	scanf("%[^\n]",temp_date);
+	scanf("%[^\n]", temp_date);
 	fflush(stdin);
 	//scanf("%10s", temp_date);
 
@@ -35,6 +35,7 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t *termData) {
 		case 7:
 		case 8:
 		case 9:
+			//check all the digit chars is correct
 			if (!(isdigit(temp_date[var]))) {
 				flag = 0;
 				return WRONG_DATE;
@@ -49,6 +50,11 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t *termData) {
 			break;
 		}
 	}
+	if (strcmp((const char*)temp_date, (const char*)last_day) > 0) {
+		flag = 0;
+		return WRONG_DATE;
+	}
+
 	if (flag == 0) {
 		return WRONG_DATE;
 	} else {
@@ -61,16 +67,13 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t *termData) {
 EN_terminalError_t isCardExpired(ST_cardData_t cardData,
 		ST_terminalData_t termData) {
 	//compare date digits in card data and terminal date
-	if (cardData.cardExpirationDate[3] < termData.transactionDate[8]) {
-		return EXPIRED_CARD;
-	} else if (cardData.cardExpirationDate[4] < termData.transactionDate[9]) {
-		return EXPIRED_CARD;
-	} else if (cardData.cardExpirationDate[0] < termData.transactionDate[3]) {
-		return EXPIRED_CARD;
-	} else if (cardData.cardExpirationDate[1] < termData.transactionDate[4]) {
-		return EXPIRED_CARD;
-	} else {
+
+
+	if (strcmp((const char*)cardData.cardExpirationDate, (const char*)(termData.transactionDate + 3))
+			> 0) {
 		return TERMINAL_OK;
+	} else {
+		return EXPIRED_CARD;
 	}
 }
 
@@ -109,11 +112,11 @@ EN_terminalError_t setMaxAmount(ST_terminalData_t *termData) {
 	fflush(stdout);
 	scanf("%f%c", &temp_mxamount, &tempchar);
 	if (temp_mxamount <= 0 || tempchar != '\n') {
-			return INVALID_AMOUNT;
-		} else {
-			termData->maxTransAmount = temp_mxamount;
-			return TERMINAL_OK;
-		}
+		return INVALID_AMOUNT;
+	} else {
+		termData->maxTransAmount = temp_mxamount;
+		return TERMINAL_OK;
+	}
 
 }
 
