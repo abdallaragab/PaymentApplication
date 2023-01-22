@@ -3,15 +3,16 @@
 #include "STD_TYPES.h"
 
 //PAN number max and min length
-#define DEF_PAN_MAX_LEN 19
+#define DEF_PAN_MAX_LEN 20
 #define DEF_PAN_MIN_LEN 16
 
 typedef struct ST_cardData_t
 {
 	uint8_t cardHolderName[25];
-	uint8_t primaryAccountNumber[20];
+	uint8_t primaryAccountNumber[21];
 	uint8_t cardExpirationDate[6];
 }ST_cardData_t;
+
 
 typedef enum EN_cardError_t
 {

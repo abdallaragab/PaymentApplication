@@ -29,13 +29,13 @@ typedef enum EN_serverError_t{
 }EN_serverError_t;
 
 typedef struct ST_accountsDB_t{
+	uint8_t primaryAccountNumber[21];
 	float balance;
 	EN_accountstate_t state;
-	uint8_t primaryAccountNumber[20];
 }ST_accountsDB_t;
 
 EN_transStat_t recieveTransactionData(ST_transaction* transData);
-EN_serverError_t isValidAccount(ST_cardData_t* cardData,ST_accountsDB_t* accountRefrence);
+EN_serverError_t isValidAccount(ST_cardData_t* cardData,ST_accountsDB_t** accountRefrence);
 EN_serverError_t isBlockedAccount(ST_accountsDB_t *accountRefrence);
 EN_serverError_t isAmountAvailable(ST_terminalData_t* termData,ST_accountsDB_t* accountRefrence);
 EN_serverError_t saveTransaction(ST_transaction* transData);
